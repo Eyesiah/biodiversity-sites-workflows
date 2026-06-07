@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cacheBGSRegister",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}
