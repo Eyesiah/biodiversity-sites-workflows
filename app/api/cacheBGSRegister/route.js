@@ -2,8 +2,8 @@ import { start } from "workflow/api";
 import { cacheRegister } from "@/workflows/BGS-register-cache";
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
-  
+export async function GET(request) {
+
   const authHeader = request.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new NextResponse("Unauthorized", { status: 401 });
