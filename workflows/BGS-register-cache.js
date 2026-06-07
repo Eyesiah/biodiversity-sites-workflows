@@ -30,23 +30,21 @@ async function fetchAndCacheData(endpoint, verb = 'POST') {
   const data = await queryBGSAPI(endpoint, verb);
   console.log(`Caching ${endpoint}`);
   await cacheDataToMongo(endpoint, verb, data);
-  return data;
 }
 
 fetchAndCacheData.maxRetries = 5;
 
 export async function cacheRegister() {
  "use workflow"; 
-
-  const siteList = await fetchAndCacheData(`search`);
+ 
+  console.log(`Fetching initial list`);
+  const siteList = await queryBGSAPI('search');
+  console.log(`Caching initial list`);
+  await cacheDataToMongo('search', 'POST', siteList);
   
   const allRefNos = siteList.filter(site => !site.referenceNumber.includes(' ')).map(site => site.referenceNumber);
-  await sleep("1s");
  
   for (const referenceNumber of allRefNos) {
     await fetchAndCacheData(`search/${referenceNumber}`, 'GET');
-    await sleep("1s");
   }
-  
- console.log("Workflow is complete! Run 'npx workflow web' to inspect your run")
 }
